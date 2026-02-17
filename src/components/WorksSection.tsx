@@ -6,7 +6,7 @@ const WorksSection = () => {
   const projects = useProjects();
 
   return (
-    <section id="works" className="section-padding">
+    <section id="works" className="section-padding scroll-mt-24">
       <div className="max-w-6xl mx-auto">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}

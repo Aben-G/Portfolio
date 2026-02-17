@@ -13,7 +13,7 @@ const fadeUp = {
 
 const AboutSection = () => {
   return (
-    <section id="about" className="section-padding">
+    <section id="about" className="section-padding scroll-mt-24">
       <div className="max-w-5xl mx-auto">
         <motion.h2
           initial="hidden"

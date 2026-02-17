@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const links = [
   { label: "Home", href: "#home" },
@@ -11,6 +12,44 @@ const links = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const scrollToHash = useCallback((hash: string) => {
+    const id = hash.replace(/^#/, "");
+    if (!id) return;
+
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  useEffect(() => {
+    if (!location.hash) return;
+    // Let the route render first (especially when navigating from /admin -> /#section)
+    const t = window.setTimeout(() => scrollToHash(location.hash), 0);
+    return () => window.clearTimeout(t);
+  }, [location.hash, scrollToHash]);
+
+  const handleNavClick = useCallback(
+    (href: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+      if (!href.startsWith("#")) return;
+      e.preventDefault();
+      setOpen(false);
+
+      // If we're not on the landing page, navigate there with the hash.
+      if (location.pathname !== "/") {
+        navigate(`/${href}`);
+        return;
+      }
+
+      // Keep the URL in sync but scroll explicitly (handles clicking same hash repeatedly).
+      window.history.pushState(null, "", href);
+      scrollToHash(href);
+    },
+    [location.pathname, navigate, scrollToHash],
+  );
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent">
@@ -25,6 +64,7 @@ const Navbar = () => {
             <a
               key={l.href}
               href={l.href}
+              onClick={handleNavClick(l.href)}
               className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-200"
             >
               {l.label}
@@ -56,7 +96,7 @@ const Navbar = () => {
                 <a
                   key={l.href}
                   href={l.href}
-                  onClick={() => setOpen(false)}
+                  onClick={handleNavClick(l.href)}
                   className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
                 >
                   {l.label}

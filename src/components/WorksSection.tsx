@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
-import { projects } from "@/data/portfolio";
+import { useProjects } from "@/hooks/use-projects";
 
 const WorksSection = () => {
+  const projects = useProjects();
+
   return (
     <section id="works" className="section-padding">
       <div className="max-w-6xl mx-auto">

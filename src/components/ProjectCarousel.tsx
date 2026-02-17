@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
-import { projects } from "@/data/portfolio";
+import { useProjects } from "@/hooks/use-projects";
 import {
   Dialog,
   DialogContent,
@@ -15,8 +15,9 @@ interface ProjectCarouselProps {
 }
 
 const ProjectCarousel = ({ isHero = false }: ProjectCarouselProps) => {
+  const projects = useProjects();
   const [current, setCurrent] = useState(0);
-  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
+  const [selectedProject, setSelectedProject] = useState<(typeof projects)[number] | null>(null);
 
   const getTagColor = (tag: string) => {
     const colors: { [key: string]: string } = {
@@ -38,15 +39,41 @@ const ProjectCarousel = ({ isHero = false }: ProjectCarouselProps) => {
     return colors[tag] || "bg-secondary text-secondary-foreground border-transparent";
   };
 
-  const next = useCallback(() => setCurrent((p) => (p + 1) % projects.length), []);
-  const prev = useCallback(() => setCurrent((p) => (p - 1 + projects.length) % projects.length), []);
+  const next = useCallback(() => {
+    setCurrent((p) => {
+      if (projects.length === 0) return 0;
+      return (p + 1) % projects.length;
+    });
+  }, [projects.length]);
+
+  const prev = useCallback(() => {
+    setCurrent((p) => {
+      if (projects.length === 0) return 0;
+      return (p - 1 + projects.length) % projects.length;
+    });
+  }, [projects.length]);
 
   useEffect(() => {
+    if (projects.length === 0) {
+      setCurrent(0);
+      setSelectedProject(null);
+      return;
+    }
+    if (current > projects.length - 1) setCurrent(0);
+  }, [projects.length, current]);
+
+  useEffect(() => {
+    if (projects.length === 0) return;
     const timer = setInterval(next, 5000);
     return () => clearInterval(timer);
   }, [next]);
 
-  const project = projects[current];
+  const project = useMemo(() => {
+    if (projects.length === 0) return null;
+    return projects[current] ?? projects[0];
+  }, [projects, current]);
+
+  if (!project) return null;
 
   return (
     <section className={isHero ? "" : "section-padding"}>

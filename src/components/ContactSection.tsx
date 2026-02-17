@@ -62,9 +62,9 @@ const ContactSection = () => {
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <MessageCircle size={18} className="text-primary" />
-                <a 
-                  href={`https://t.me/${contactInfo.telegram.replace('@', '')}`} 
-                  target="_blank" 
+                <a
+                  href={`https://t.me/${contactInfo.telegram.replace('@', '')}`}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >

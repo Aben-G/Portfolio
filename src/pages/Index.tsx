@@ -19,3 +19,6 @@ const Index = () => {
       <Footer />
     </main>
   );
+};
+
+export default Index;

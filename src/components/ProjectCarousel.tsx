@@ -169,14 +169,16 @@ const ProjectCarousel = ({ isHero = false }: ProjectCarouselProps) => {
                   </span>
                 ))}
               </div>
-              <a
-                href={selectedProject?.link}
-                target="_blank"
-                rel="noreferrer"
-                className="w-fit inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity"
-              >
-                View Live Project <ExternalLink size={18} />
-              </a>
+              {selectedProject?.link && (
+                <a
+                  href={selectedProject?.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-fit inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity"
+                >
+                  View Live Project <ExternalLink size={18} />
+                </a>
+              )}
             </div>
           </div>
         </DialogContent>

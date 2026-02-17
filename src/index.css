@@ -59,7 +59,12 @@
     @apply bg-background text-foreground font-body antialiased;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading;
   }
 }
@@ -76,6 +81,14 @@
 
   .glass {
     @apply bg-card/60 backdrop-blur-xl border border-border/50;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .rotate-y-0 {
+    transform: rotateY(0deg) !important;
   }
 }
 
